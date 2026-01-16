@@ -1,10 +1,14 @@
 package com.example.gestao.financeira.service;
 
 import com.example.gestao.financeira.DTO.LacamentoDto;
+import com.example.gestao.financeira.DTO.LacamentoResponseDto;
+import com.example.gestao.financeira.Enum.Categoria;
+import com.example.gestao.financeira.Enum.Moeda;
+import com.example.gestao.financeira.Enum.Tipo;
 import com.example.gestao.financeira.Exceptions.RegraNegocioException;
 import com.example.gestao.financeira.Repository.LacamentoRepository;
 import com.example.gestao.financeira.model.Lancamento;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -12,22 +16,33 @@ import java.math.BigDecimal;
 @Service
 public class LacamentoService {
 
-    @Autowired
-    private LacamentoRepository repository;
+    private final LacamentoRepository lacamentoRepository;
 
-    public void criarLancamento(LacamentoDto dto) {
+    public LacamentoService(LacamentoRepository lacamentoRepository) {
+        this.lacamentoRepository = lacamentoRepository;
+    }
+
+    @Transactional
+    public LacamentoResponseDto criarLancamento(LacamentoDto dto) {
         if (dto.valor().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new RegraNegocioException("o deve ser maior que zero");
+            throw new RegraNegocioException("o valor deve ser maior que zero");
         }
-        Lancamento lanca = new Lancamento();
-        lanca.setDescricao(dto.descricao());
-        lanca.setValor(dto.valor());
-        lanca.setMoeda(dto.moeda());
-        lanca.setData(dto.data());
-        lanca.setCategoria(dto.categoria());
-        lanca.setTipo(dto.tipo());
-        repository.save(lanca);
+        Lancamento lanca = new Lancamento(
+                dto.descricao(),
+                dto.valor(),
+                dto.moeda(),
+                dto.tipo(),
+                dto.categoria()
 
-
+        );
+       lacamentoRepository.save(lanca);
+      return new LacamentoResponseDto(
+           lanca.getDescricao(),
+              lanca.getValor(),
+              lanca.getMoeda(),
+              lanca.getCategoria(),
+              lanca.getTipo(),
+              lanca.getData()
+      );
     }
 }
