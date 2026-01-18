@@ -6,7 +6,7 @@ import com.example.gestao.financeira.Enum.Tipo;
 
 import java.math.BigDecimal;
 
-public record LacamentoDto(
+public record LacamentoRequestDto(
         Integer id,
         String descricao,
         BigDecimal valor,
