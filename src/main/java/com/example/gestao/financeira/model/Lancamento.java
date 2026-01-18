@@ -1,16 +1,13 @@
 package com.example.gestao.financeira.model;
 
 import com.example.gestao.financeira.Enum.Categoria;
-import com.example.gestao.financeira.Enum.Tipo;
 import com.example.gestao.financeira.Enum.Moeda;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.example.gestao.financeira.Enum.Tipo;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "lancamento")
@@ -33,6 +30,8 @@ public class Lancamento {
     private BigDecimal valorConvertido;
 
     private BigDecimal taxaDeConversao;
+    private BigDecimal totalEntradas;
+    private BigDecimal totalSaidas;
 
     @Enumerated(EnumType.STRING)
     private Moeda moeda;
@@ -58,5 +57,8 @@ public class Lancamento {
         this.tipo = tipo;
         this.categoria = categoria;
 
+
     }
+
+
 }
