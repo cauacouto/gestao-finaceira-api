@@ -7,8 +7,8 @@ import com.example.gestao.financeira.DTO.RelatorioResumoDto;
 import com.example.gestao.financeira.Enum.Categoria;
 import com.example.gestao.financeira.Enum.Tipo;
 import com.example.gestao.financeira.Exceptions.RegraNegocioException;
-import com.example.gestao.financeira.mapper.LancamentoMapper;
 import com.example.gestao.financeira.Repository.LacamentoRepository;
+import com.example.gestao.financeira.mapper.LancamentoMapper;
 import com.example.gestao.financeira.model.Lancamento;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,7 @@ public class LacamentoService {
         return lancamentoMapper.toResponseDto(lancamento);
 
     }
-    @Transactional()
+
     public RelatorioResumoDto gerarRelatorio(int mes, int ano){
         List<Lancamento> lancamento = lacamentoRepository.findByMesEAno(mes, ano);
 
@@ -71,7 +71,7 @@ public class LacamentoService {
 
         );
     }
-
+@Transactional
     public LacamentoResponseDto atualizarLancamento(Integer id , AtualizaLancamento dto){
         Lancamento lancamentoExiste = lacamentoRepository.findById(id)
                 .orElseThrow(()-> new RegraNegocioException("lançamento nao encotrado" + id));
@@ -80,7 +80,7 @@ public class LacamentoService {
          return lancamentoMapper.toResponseDto(lancamentoSalvo);
 
     }
-
+@Transactional
     public void excluirLancamento(Integer id){
         if (!lacamentoRepository.existsById(id)){
             throw new RegraNegocioException("lançamento não encontrado");
